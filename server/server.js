@@ -1,8 +1,10 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const authRoutes = require("./routes/authRoutes.js");
-const cors = require("cors");
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import authRoutes from "./routes/authRoutes.js";
+import { authenticate, authorize } from "./middlewares/authMiddleware.js";
+import cors from "cors";
+
 
 dotenv.config();
 
@@ -22,3 +24,17 @@ mongoose
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => console.error(err));
+
+app.get("/", (req, res) => {
+  res.send("API is running. Use /api/auth/signup or /api/auth/login");
+});
+
+// Student-only route
+app.get("/api/student/profile", authenticate, authorize(["student", "admin"]), (req, res) => {
+  res.json({ message: "Hello Student", user: req.user });
+});
+
+// Admin-only route
+app.get("/api/admin/dashboard", authenticate, authorize(["admin"]), (req, res) => {
+  res.json({ message: "Welcome Admin 🚀", user: req.user });
+});
