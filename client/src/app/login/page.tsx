@@ -31,7 +31,7 @@ export default function LoginPage() {
 
     // 🔄 Redirect based on role
     if (data.user.role === "admin") {
-      router.push("/admin/dashboard");
+      router.push("/dashboard");
     } else {
       router.push("/feedback");
     }
@@ -78,3 +78,11 @@ export default function LoginPage() {
     </div>
   );
 }
+
+
+
+
+// {
+//   "email": "testuser@example.com",
+//   "password": "Test@1234"
+// }
