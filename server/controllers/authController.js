@@ -1,12 +1,11 @@
-import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/User";
-import { validateEmail, validatePassword } from "../utils/validators";
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User.js");
+const { validateEmail, validatePassword } = require("../utils/validators.js");
 
 const JWT_SECRET = process.env.JWT_SECRET || "secretkey";
 
-export const signup = async (req: Request, res: Response) => {
+const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -49,7 +48,7 @@ export const signup = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -77,3 +76,5 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error", error: err });
   }
 };
+
+module.exports = { signup, login };
