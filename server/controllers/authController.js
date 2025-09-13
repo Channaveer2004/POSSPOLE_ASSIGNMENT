@@ -1,7 +1,10 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User.js");
-const { validateEmail, validatePassword } = require("../utils/validators.js");
+import bcryptPkg from "bcryptjs";
+import jwtPkg from "jsonwebtoken";
+import User from "../models/User.js";
+import { validateEmail, validatePassword } from "../utils/validators.js";
+
+const { hash, compare } = bcryptPkg;
+const { sign } = jwtPkg;
 
 const JWT_SECRET = process.env.JWT_SECRET || "secretkey";
 
@@ -25,7 +28,7 @@ const signup = async (req, res) => {
     if (existingUser)
       return res.status(400).json({ message: "Email already registered" });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hash(password, 10);
 
     const user = await User.create({
       name,
@@ -34,7 +37,7 @@ const signup = async (req, res) => {
       role: "student",
     });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+    const token = sign({ id: user._id, role: user.role }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
@@ -59,11 +62,11 @@ const login = async (req, res) => {
     if (!user)
       return res.status(400).json({ message: "Invalid email or password" });
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({ message: "Invalid email or password" });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+    const token = sign({ id: user._id, role: user.role }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
@@ -77,4 +80,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+export default { signup, login };

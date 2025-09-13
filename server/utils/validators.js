@@ -8,4 +8,4 @@ function validatePassword(password) {
   return re.test(password);
 }
 
-module.exports = { validateEmail, validatePassword };
+export { validateEmail, validatePassword };
