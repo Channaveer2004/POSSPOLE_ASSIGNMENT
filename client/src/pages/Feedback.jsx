@@ -12,6 +12,7 @@ export default function Feedback() {
   const [form, setForm] = useState({ courseId: "", rating: 0, message: "" });
   const [hoverRating, setHoverRating] = useState(0);
   const [detailModal, setDetailModal] = useState({ isOpen: false, feedback: null });
+  const [editModal, setEditModal] = useState({ rating: 0, message: "", hover: 0 });
   const user = useAuthStore((state) => state.user);
 
   // Load courses and student feedbacks
@@ -37,6 +38,31 @@ export default function Feedback() {
     await api.post("/feedback", form);
     setForm({ courseId: "", rating: 5, message: "" });
     loadData();
+  };
+
+  // Delete feedback
+  const deleteFeedback = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this feedback?")) return;
+    await api.delete(`/feedback/${id}`);
+    loadData();
+    setDetailModal({ isOpen: false, feedback: null });
+  };
+
+  // Open modal for editing
+  const openEditModal = (feedback) => {
+    setDetailModal({ isOpen: true, feedback });
+    setEditModal({ rating: feedback.rating, message: feedback.message, hover: 0 });
+  };
+
+  // Save edited feedback
+  const saveEditFeedback = async () => {
+    const { feedback } = detailModal;
+    await api.put(`/feedback/${feedback._id}`, {
+      rating: editModal.rating,
+      message: editModal.message,
+    });
+    loadData();
+    setDetailModal({ isOpen: false, feedback: null });
   };
 
   return (
@@ -162,12 +188,20 @@ export default function Feedback() {
                   {f.message.length > 100 ? `${f.message.substring(0, 100)}...` : f.message}
                 </p>
               </div>
-              <button
-                onClick={() => setDetailModal({ isOpen: true, feedback: f })}
-                style={{ background: "#2563eb", color: "#fff", border: "none", borderRadius: 6, padding: "0.5rem 1.2rem", fontWeight: 500, cursor: "pointer", fontSize: 15, boxShadow: "0 1px 4px #0001", transition: "background 0.2s" }}
-              >
-                View Details
-              </button>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  onClick={() => openEditModal(f)}
+                  style={{ background: "#2563eb", color: "#fff", border: "none", borderRadius: 6, padding: "0.5rem 1.2rem", fontWeight: 500, cursor: "pointer", fontSize: 15, boxShadow: "0 1px 4px #0001", transition: "background 0.2s" }}
+                >
+                  View Details
+                </button>
+                <button
+                  onClick={() => deleteFeedback(f._id)}
+                  style={{ background: "#dc2626", color: "#fff", border: "none", borderRadius: 6, padding: "0.5rem 1.2rem", fontWeight: 500, cursor: "pointer", fontSize: 15, boxShadow: "0 1px 4px #0001", transition: "background 0.2s" }}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -181,7 +215,7 @@ export default function Feedback() {
         size="medium"
       >
         {detailModal.feedback && (
-          <div>
+          <div style={{ background: "#f0f6ff", borderRadius: 12, padding: 24 }}>
             <div style={{ marginBottom: "1.2rem" }}>
               <h4 style={{ margin: "0 0 0.5rem 0", color: "#2563eb", fontWeight: 700 }}>
                 {detailModal.feedback.course.name}
@@ -195,34 +229,46 @@ export default function Feedback() {
                 Rating
               </label>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ fontSize: "1.2rem" }}>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <span key={i} style={{ color: i < detailModal.feedback.rating ? "#fbbf24" : "#d1d5db" }}>
-                      ⭐
-                    </span>
-                  ))}
-                </span>
-                <span style={{ fontWeight: "500" }}>
-                  {detailModal.feedback.rating}/5
-                </span>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      cursor: "pointer",
+                      fontSize: 28,
+                      color: (editModal.hover || editModal.rating) > i ? "#fbbf24" : "#d1d5db",
+                      transition: "color 0.15s"
+                    }}
+                    onMouseEnter={() => setEditModal((prev) => ({ ...prev, hover: i + 1 }))}
+                    onMouseLeave={() => setEditModal((prev) => ({ ...prev, hover: 0 }))}
+                    onClick={() => setEditModal((prev) => ({ ...prev, rating: i + 1 }))}
+                    aria-label={`Rate ${i + 1} star${i === 0 ? '' : 's'}`}
+                  >
+                    ★
+                  </span>
+                ))}
+                <span style={{ marginLeft: 8, fontWeight: 500, color: "#2563eb", fontSize: 17 }}>{editModal.rating}/5</span>
               </div>
             </div>
             <div style={{ marginBottom: "1.2rem" }}>
               <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
                 Feedback Message
               </label>
-              <div
+              <textarea
+                value={editModal.message}
+                onChange={e => setEditModal((prev) => ({ ...prev, message: e.target.value }))}
                 style={{
-                  padding: "1rem",
-                  backgroundColor: "#f3f4f6",
-                  borderRadius: "4px",
-                  border: "1px solid #e5e7eb",
-                  minHeight: "100px",
-                  fontSize: 16,
+                  padding: "0.9rem 1.2rem",
+                  borderRadius: 8,
+                  border: "1.5px solid #2563eb",
+                  width: "100%",
+                  fontSize: 17,
+                  minHeight: 100,
+                  background: "#fff",
+                  boxShadow: editModal.message ? "0 0 0 2px #2563eb22" : "none",
+                  outline: "none",
+                  transition: "box-shadow 0.2s"
                 }}
-              >
-                {detailModal.feedback.message}
-              </div>
+              />
             </div>
             <div style={{ marginBottom: "1.2rem" }}>
               <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500" }}>
@@ -238,7 +284,19 @@ export default function Feedback() {
                 })}
               </p>
             </div>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+              <button
+                onClick={saveEditFeedback}
+                style={{ background: "#16a34a", color: "#fff", border: "none", borderRadius: 6, padding: "0.5rem 1.2rem", fontWeight: 500, cursor: "pointer", fontSize: 15, boxShadow: "0 1px 4px #0001", transition: "background 0.2s" }}
+              >
+                Save
+              </button>
+              <button
+                onClick={() => deleteFeedback(detailModal.feedback._id)}
+                style={{ background: "#dc2626", color: "#fff", border: "none", borderRadius: 6, padding: "0.5rem 1.2rem", fontWeight: 500, cursor: "pointer", fontSize: 15, boxShadow: "0 1px 4px #0001", transition: "background 0.2s" }}
+              >
+                Delete
+              </button>
               <button
                 onClick={() => setDetailModal({ isOpen: false, feedback: null })}
                 style={{ background: "#2563eb", color: "#fff", border: "none", borderRadius: 6, padding: "0.5rem 1.2rem", fontWeight: 500, cursor: "pointer", fontSize: 15, boxShadow: "0 1px 4px #0001", transition: "background 0.2s" }}
