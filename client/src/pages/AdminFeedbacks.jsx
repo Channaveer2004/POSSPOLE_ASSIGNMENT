@@ -85,10 +85,10 @@ const AdminFeedbacks = () => {
             ) : (
               feedbacks.map((fb) => (
                 <tr key={fb._id}>
-                  <td>{fb.course?.title || fb.course}</td>
-                  <td>{fb.student?.name || fb.student?.email || fb.student}</td>
+                  <td>{fb.course?.name || fb.course}</td>
+                  <td>{fb.user?.name || fb.user?.email || fb.user}</td>
                   <td>{fb.rating}</td>
-                  <td>{fb.comment}</td>
+                  <td>{fb.message}</td>
                   <td>{new Date(fb.createdAt).toLocaleString()}</td>
                 </tr>
               ))
