@@ -3,7 +3,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
 
 .main-content {
   flex: 1;
@@ -857,6 +856,43 @@
   .action-card {
     padding: var(--space-4);
   }
+  /* Extra: Make tables scrollable on mobile */
+  .table-container {
+    overflow-x: auto;
+  }
+  .table {
+    min-width: 600px;
+  }
+  /* Reduce padding for cards and containers */
+  .card-header, .card-body, .card-footer {
+    padding: var(--space-4);
+  }
+  .auth-header, .auth-form, .auth-footer {
+    padding: var(--space-4);
+  }
+  .auth-container {
+    max-width: 100vw;
+    padding: 0 1rem;
+  }
+  .trend-card {
+    padding: var(--space-3);
+  }
+  .stat-card {
+    padding: var(--space-4);
+  }
+  .activity-item {
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+  .activity-icon, .stat-icon, .action-icon {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-base);
+  }
+  .empty-state {
+    padding: var(--space-8) var(--space-2);
+  }
+}
   
   .action-icon {
     width: 40px;

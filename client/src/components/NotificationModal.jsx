@@ -56,11 +56,27 @@ export default function NotificationModal({
       size="small"
       showCloseButton={!autoClose}
     >
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>
+      <div
+        style={{
+          textAlign: "center",
+          padding: window.innerWidth <= 480 ? "0.5rem" : undefined
+        }}
+      >
+        <div
+          style={{
+            fontSize: window.innerWidth <= 480 ? "2rem" : "3rem",
+            marginBottom: window.innerWidth <= 480 ? "0.5rem" : "1rem"
+          }}
+        >
           {getIcon()}
         </div>
-        <p style={{ marginBottom: "1.5rem", lineHeight: "1.5" }}>
+        <p
+          style={{
+            marginBottom: window.innerWidth <= 480 ? "1rem" : "1.5rem",
+            lineHeight: "1.5",
+            fontSize: window.innerWidth <= 480 ? "1rem" : undefined
+          }}
+        >
           {message}
         </p>
         {!autoClose && (
@@ -69,10 +85,11 @@ export default function NotificationModal({
             style={{
               backgroundColor: getButtonColor(),
               color: "white",
-              padding: "0.5rem 1.5rem",
+              padding: window.innerWidth <= 480 ? "0.5rem 1rem" : "0.5rem 1.5rem",
               borderRadius: "4px",
               border: "none",
-              cursor: "pointer"
+              cursor: "pointer",
+              fontSize: window.innerWidth <= 480 ? "1rem" : undefined
             }}
           >
             OK
