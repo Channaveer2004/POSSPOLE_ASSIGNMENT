@@ -1,3 +1,25 @@
+  // Export feedbacks to CSV
+  const exportToCSV = () => {
+    if (!feedbacks.length) return;
+    const header = ["Course","Student","Rating","Comment","Date"];
+    const rows = feedbacks.map(fb => [
+      '"' + (fb.course?.name || fb.course || "") + '"',
+      '"' + (fb.user?.name || fb.user?.email || fb.user || "") + '"',
+      fb.rating,
+      '"' + (fb.message || "") + '"',
+      '"' + (new Date(fb.createdAt).toLocaleString()) + '"'
+    ]);
+    const csvContent = [header, ...rows].map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "feedbacks.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 import React, { useEffect, useState } from "react";
 import api from "../api/api";
 import "../pages/Landing.css";
@@ -58,7 +80,12 @@ const AdminFeedbacks = () => {
 
   return (
     <div className="admin-feedbacks-page" style={{ maxWidth: 1000, margin: "40px auto", background: "#fff", borderRadius: 12, boxShadow: "0 2px 16px #0001", padding: 32 }}>
-      <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24, color: "#1a237e", letterSpacing: 1 }}>All Feedbacks</h2>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+        <h2 style={{ fontSize: 28, fontWeight: 700, color: "#1a237e", letterSpacing: 1 }}>All Feedbacks</h2>
+        <button onClick={exportToCSV} style={{ padding: "8px 18px", background: "#388e3c", color: "#fff", border: 0, borderRadius: 6, fontWeight: 600, cursor: "pointer", fontSize: 15 }}>
+          Export to CSV
+        </button>
+      </div>
       <div className="filters" style={{ display: "flex", gap: 20, marginBottom: 32, alignItems: "center" }}>
         <div>
           <label style={{ fontWeight: 500, color: "#333" }}>Course:</label><br />
