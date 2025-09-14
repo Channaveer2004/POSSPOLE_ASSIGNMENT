@@ -25,8 +25,8 @@ export default function Navbar() {
         <div className="navbar-content">
           <div className="navbar-brand">
             <Link to="/dashboard" className="brand-link">
-              <span className="brand-icon">🎓</span>
-              <span className="brand-text">EduPlatform</span>
+              {/* <span className="brand-icon">🎓</span> */}
+              <span className="brand-text">Feed⭐Forward</span>
             </Link>
           </div>
 
