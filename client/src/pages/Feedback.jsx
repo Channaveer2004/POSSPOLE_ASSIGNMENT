@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
+
 import Navbar from "../components/Navbar";
 import Modal from "../components/Modal";
+import useAuthStore from "../store/authStore";
 
 export default function Feedback() {
   const [courses, setCourses] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
   const [form, setForm] = useState({ courseId: "", rating: 5, message: "" });
   const [detailModal, setDetailModal] = useState({ isOpen: false, feedback: null });
+  const user = useAuthStore((state) => state.user);
 
   // Load courses and student feedbacks
   const loadData = async () => {
@@ -34,52 +37,63 @@ export default function Feedback() {
     loadData();
   };
 
+
   return (
     <div>
       <Navbar />
-      <h2>Submit Feedback</h2>
+      {/* Only render feedback form if not admin, else show message */}
+      {user?.role === "admin" ? (
+        <div style={{ margin: "2rem 0", color: "#b91c1c", fontWeight: 600, fontSize: "1.1rem" }}>
+          Feedbacks cannot be provided by admin
+        </div>
+      ) : (
+        <>
 
-      {/* Course dropdown */}
-      <select
-        value={form.courseId}
-        onChange={(e) => setForm({ ...form, courseId: e.target.value })}
-        style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc", marginBottom: "1rem" }}
-      >
-        <option value="">Select Course</option>
-        {courses.map((c) => (
-          <option key={c._id} value={c._id}>
-            {c.name} {/* updated from title */}
-          </option>
-        ))}
-      </select>
+          <h3 style={{ marginTop: "2rem" }}>My Feedbacks</h3>
+          {feedbacks.length === 0 && <p>No feedbacks submitted yet.</p>}
+          <h2>Submit Feedback</h2>
+          {/* Course dropdown */}
+          <select
+            value={form.courseId}
+            onChange={(e) => setForm({ ...form, courseId: e.target.value })}
+            style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc", marginBottom: "1rem" }}
+          >
+            <option value="">Select Course</option>
+            {courses.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
 
-      {/* Rating input */}
-      <input
-        type="number"
-        min="1"
-        max="5"
-        value={form.rating}
-        onChange={(e) => setForm({ ...form, rating: e.target.value })}
-        style={{ marginLeft: "1rem", width: "60px" }}
-      />
+          {/* Rating input */}
+          <input
+            type="number"
+            min="1"
+            max="5"
+            value={form.rating}
+            onChange={(e) => setForm({ ...form, rating: e.target.value })}
+            style={{ marginLeft: "1rem", width: "60px" }}
+          />
 
-      {/* Message textarea */}
-      <textarea
-        value={form.message}
-        onChange={(e) => setForm({ ...form, message: e.target.value })}
-        placeholder="Write your feedback..."
-        style={{ display: "block", width: "100%", marginTop: "1rem", padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc", minHeight: "80px" }}
-      />
+          {/* Message textarea */}
+          <textarea
+            value={form.message}
+            onChange={(e) => setForm({ ...form, message: e.target.value })}
+            placeholder="Write your feedback..."
+            style={{ display: "block", width: "100%", marginTop: "1rem", padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc", minHeight: "80px" }}
+          />
 
-      <button
-        onClick={submitFeedback}
-        style={{ marginTop: "0.5rem", padding: "0.5rem 1rem", backgroundColor: "#16a34a", color: "#fff", borderRadius: "4px", border: "none" }}
-      >
-        Submit
-      </button>
+          <button
+            onClick={submitFeedback}
+            style={{ marginTop: "0.5rem", padding: "0.5rem 1rem", backgroundColor: "#16a34a", color: "#fff", borderRadius: "4px", border: "none" }}
+          >
+            Submit
+          </button>
+        </>
+      )}
 
-      <h3 style={{ marginTop: "2rem" }}>My Feedbacks</h3>
-      {feedbacks.length === 0 && <p>No feedbacks submitted yet.</p>}
+
 
       {feedbacks.map((f) => (
         <div

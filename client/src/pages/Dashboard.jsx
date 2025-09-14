@@ -15,13 +15,14 @@ export default function Dashboard() {
       action: () => window.location.href = "/courses",
       color: "blue"
     },
-    {
+    // Only show Give Feedback if not admin
+    ...((!user || user.role !== "admin") ? [{
       title: "Give Feedback",
       description: "Share your feedback",
       icon: "💬",
       action: () => window.location.href = "/feedback",
       color: "green"
-    },
+    }] : []),
     {
       title: "Update Profile",
       description: "Manage your profile",

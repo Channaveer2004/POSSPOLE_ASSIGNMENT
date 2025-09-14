@@ -9,6 +9,7 @@ const router = express.Router();
 // Student: Submit feedback
 router.post("/", requireAuth, async (req, res) => {
   try {
+
     const { courseId, rating, message } = req.body;
     const course = await Course.findById(courseId);
     if (!course) return res.status(404).json({ message: "Course not found" });
