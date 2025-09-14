@@ -1,7 +1,5 @@
-// server/controllers/courseController.js
 import Course from "../models/Course.js";
 
-// Create Course
 export async function createCourse(req, res) {
   try {
     const { title, code, description } = req.body;
@@ -24,7 +22,7 @@ export async function createCourse(req, res) {
   }
 }
 
-// Update Course
+
 export async function updateCourse(req, res) {
   try {
     const { id } = req.params;
@@ -52,7 +50,7 @@ export async function updateCourse(req, res) {
   }
 }
 
-// Delete Course
+
 export async function deleteCourse(req, res) {
   try {
     const { id } = req.params;
@@ -67,7 +65,7 @@ export async function deleteCourse(req, res) {
   }
 }
 
-// List Courses
+
 export async function listCourses(req, res) {
   try {
     const { page = 1, limit = 10, search = "" } = req.query;

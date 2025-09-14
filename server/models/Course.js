@@ -1,16 +1,12 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const courseSchema = new Schema(
+const courseSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true, trim: true },
-    code: { type: String, required: true, unique: true, uppercase: true, trim: true },
-    description: { type: String, default: "" },
+    code: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    description: String,
   },
   { timestamps: true }
 );
 
-
-courseSchema.index({ code: 1 }, { unique: true });
-
-const Course = model("Course", courseSchema);
-export default Course;
+export default mongoose.model("Course", courseSchema);

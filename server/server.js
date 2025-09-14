@@ -1,40 +1,58 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-import authRoutes from "./routes/authRoutes.js";
-import { authenticate, authorize } from "./middlewares/authMiddleware.js";
+import helmet from "helmet";
 import cors from "cors";
-import courseRoutes from "./routes/courseRoutes.js"
+import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
+import { connectDB } from "./config/db.js";
+
+
+import authRoutes from "./routes/auth.js";
+import profileRoutes from "./routes/profile.js";
+import feedbackRoutes from "./routes/feedback.js";
+import coursesRoutes from "./routes/courses.js";
+import adminRoutes from "./routes/admin.js";
 
 dotenv.config();
 const app = express();
+
+
+connectDB();
+
+
+app.use(helmet());
+app.use(cors({
+  origin: process.env.CLIENT_URL, 
+  credentials: true,              
+}));
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 1000,
+});
+app.use(limiter);
+
 
 app.use("/api/auth", authRoutes);
-app.use("/api/courses", courseRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/feedback", feedbackRoutes);
+app.use("/api/courses", coursesRoutes);
+app.use("/api/admin", adminRoutes);
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/feedback-app";
-
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log("MongoDB connected");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch((err) => console.error(err));
 
 app.get("/", (req, res) => {
-  res.send("API is running. Use /api/auth/signup or /api/auth/login");
+  res.send("Backend is running ");
 });
 
-// Student-only route
-app.get("/api/student/profile", authenticate, authorize(["student", "admin"]), (req, res) => {
-  res.json({ message: "Hello Student", user: req.user });
+
+app.use((err, req, res, next) => {
+  console.error("Error:", err.stack);
+  res.status(500).json({ message: "Something went wrong!" });
 });
 
-// Admin-only route
-app.get("/api/admin/dashboard", authenticate, authorize(["admin"]), (req, res) => {
-  res.json({ message: "Welcome Admin 🚀", user: req.user });
-});
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
