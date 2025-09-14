@@ -1,25 +1,3 @@
-  // Export feedbacks to CSV
-  const exportToCSV = () => {
-    if (!feedbacks.length) return;
-    const header = ["Course","Student","Rating","Comment","Date"];
-    const rows = feedbacks.map(fb => [
-      '"' + (fb.course?.name || fb.course || "") + '"',
-      '"' + (fb.user?.name || fb.user?.email || fb.user || "") + '"',
-      fb.rating,
-      '"' + (fb.message || "") + '"',
-      '"' + (new Date(fb.createdAt).toLocaleString()) + '"'
-    ]);
-    const csvContent = [header, ...rows].map(e => e.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "feedbacks.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 import React, { useEffect, useState } from "react";
 import api from "../api/api";
 import "../pages/Landing.css";
@@ -29,6 +7,29 @@ const AdminFeedbacks = () => {
   const [courses, setCourses] = useState([]);
   const [filters, setFilters] = useState({ course: "", rating: "", student: "" });
   const [loading, setLoading] = useState(true);
+
+// Export feedbacks to CSV
+const exportToCSV = () => {
+  if (!feedbacks.length) return;
+  const header = ["Course","Student","Rating","Comment","Date"];
+  const rows = feedbacks.map(fb => [
+    '"' + (fb.course?.name || fb.course || "") + '"',
+    '"' + (fb.user?.name || fb.user?.email || fb.user || "") + '"',
+    fb.rating,
+    '"' + (fb.message || "") + '"',
+    '"' + (new Date(fb.createdAt).toLocaleString()) + '"'
+  ]);
+  const csvContent = [header, ...rows].map(e => e.join(",")).join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", "feedbacks.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
 
   useEffect(() => {
     fetchFeedbacks();
