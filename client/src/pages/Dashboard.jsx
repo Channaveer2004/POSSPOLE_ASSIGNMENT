@@ -56,7 +56,7 @@ export default function Dashboard() {
       <Navbar />
       <div className="container">
         <div className="page-header"><br />
-          <h1 className="page-title">Welcome back, {user?.name}! 👋</h1>
+          <h1 className="page-title">Welcome, {user?.name}! 👋</h1>
           <p className="page-subtitle">
             Here's what's happening with your account today.
           </p>
