@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import api from "../api/api";
 
-const useAuthStore = create((set) => ({
+const useAuthStore = create((set, get) => ({
   user: null,
   accessToken: localStorage.getItem("accessToken") || null,
 
@@ -21,6 +21,15 @@ const useAuthStore = create((set) => ({
     await api.post("/auth/logout");
     localStorage.removeItem("accessToken");
     set({ user: null, accessToken: null });
+  },
+
+  fetchUser: async () => {
+    try {
+      const res = await api.get("/profile");
+      set({ user: res.data });
+    } catch {
+      set({ user: null });
+    }
   },
 }));
 
