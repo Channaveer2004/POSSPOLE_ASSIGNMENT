@@ -17,7 +17,7 @@
 .logo {
   font-size: 2rem;
   font-weight: bold;
-  color: #4f46e5;
+  color: #4e46e5c7;
   letter-spacing: 2px;
 }
 
@@ -66,7 +66,7 @@
   background: #6366f1;
   color: #fff;
   padding: 0.75rem 2rem;
-  border-radius: 2rem;
+  border-radius: 2rem ;
   font-size: 1.1rem;
   font-weight: 600;
   text-decoration: none;
@@ -75,8 +75,10 @@
 }
 
 .cta-primary:hover {
-  background: #4f46e5;
+  background: white;
+  color: #6366f1;
   box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+  border-color: #6366f1;
 }
 
 .cta-secondary {

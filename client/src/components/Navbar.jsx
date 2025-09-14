@@ -16,6 +16,7 @@ export default function Navbar() {
   const adminItems = [
     { path: "/courses", label: "Courses", icon: "📚" },
     { path: "/admin", label: "Admin", icon: "⚙️" },
+    { path: "/admin-feedbacks", label: "Feedbacks", icon: "📝" },
   ];
 
   return (

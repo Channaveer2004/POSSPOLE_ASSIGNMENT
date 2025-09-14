@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Feedback from "./pages/Feedback";
 import Courses from "./pages/Courses";
 import Admin from "./pages/Admin";
+import AdminFeedbacks from "./pages/AdminFeedbacks";
 import Landing from "./pages/Landing";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
@@ -55,6 +56,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Admin />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin-feedbacks"
+            element={
+              <ProtectedRoute>
+                <AdminFeedbacks />
               </ProtectedRoute>
             }
           />
