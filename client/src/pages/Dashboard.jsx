@@ -38,7 +38,7 @@ export default function Dashboard() {
       color: "orange",
       adminOnly: true
     },
-    // Only show View Feedbacks if admin
+     // Only show View Feedbacks if admin
     ...((user && user.role === "admin") ? [{
       title: "View Feedbacks",
       description: "See all feedbacks and filter",
@@ -47,7 +47,10 @@ export default function Dashboard() {
       color: "teal",
       adminOnly: true
     }] : [])
+    
   ];
+
+ 
 
   const filteredActions = user?.role === "admin" 
     ? quickActions 
@@ -58,10 +61,37 @@ export default function Dashboard() {
       <Navbar />
       <div className="container">
         <div className="page-header"><br />
-          <h1 className="page-title">Welcome, {user?.name}! 👋</h1>
+          <h1 className="page-title">Welcome , {user?.name}! 👋</h1>
           <p className="page-subtitle">
             Here's what's happening with your account today.
           </p>
+        </div>
+
+        
+
+        {/* Quick Actions */}
+        <div className="card">
+          <div className="card-header">
+            <h3 className="text-xl font-semibold text-gray-900">Quick Actions</h3>
+            <p className="text-gray-600">Get things done quickly</p>
+          </div>
+          <div className="card-body">
+            <div className="grid grid-cols-2 gap-4">
+              {filteredActions.map((action, index) => (
+                <button
+                  key={index}
+                  onClick={action.action}
+                  className={`action-card action-card-${action.color}`}
+                >
+                  <div className="action-icon">{action.icon}</div>
+                  <div className="action-content">
+                    <h4 className="action-title">{action.title}</h4>
+                    <p className="action-description">{action.description}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         
