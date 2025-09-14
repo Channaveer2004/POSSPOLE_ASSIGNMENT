@@ -11,8 +11,9 @@ const router = express.Router();
 router.get("/stats", requireAuth, requireAdmin, async (req, res) => {
   const totalFeedback = await Feedback.countDocuments();
   const totalStudents = await User.countDocuments({ role: "student" });
+  const totalCourses = await Course.countDocuments();
 
-  res.json({ totalFeedback, totalStudents });
+  res.json({ totalFeedback, totalStudents, totalCourses });
 });
 
 // Manage students

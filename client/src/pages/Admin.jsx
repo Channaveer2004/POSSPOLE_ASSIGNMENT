@@ -129,7 +129,7 @@ export default function Admin() {
               <div className="stat-icon stat-icon-purple">📚</div>
               <div className="text-right">
                 <div className="stat-value">{stats.totalCourses || 0}</div>
-                <div className="stat-label">Total Courses</div>
+                <div className="stat-label">Total Coursesss</div>
               </div>
             </div>
           </div>
