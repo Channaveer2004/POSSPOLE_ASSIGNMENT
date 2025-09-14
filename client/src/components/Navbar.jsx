@@ -10,13 +10,13 @@ export default function Navbar() {
   const navItems = [
     { path: "/dashboard", label: "Dashboard", icon: "📊" },
     { path: "/profile", label: "Profile", icon: "👤" },
-    { path: "/feedback", label: "Feedback", icon: "💬" },
+    // { path: "/feedback", label: "Feedback", icon: "💬" },
   ];
 
   const adminItems = [
     { path: "/courses", label: "Courses", icon: "📚" },
     { path: "/admin", label: "Admin", icon: "⚙️" },
-    { path: "/admin-feedbacks", label: "Feedbacks", icon: "📝" },
+    // { path: "/admin-feedbacks", label: "Feedbacks", icon: "📝" },
   ];
 
   return (
