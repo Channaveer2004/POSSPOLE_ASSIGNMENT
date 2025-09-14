@@ -2,7 +2,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
-import { requireAuth } from "../middleware/auth.js"; // <- corrected import
+import { requireAuth } from "../middlewares/auth.js"; // <- corrected import
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@
 import express from "express";
 import Feedback from "../models/Feedback.js";
 import Course from "../models/Course.js";
-import { requireAuth, requireAdmin } from "../middleware/auth.js";
+import { requireAuth, requireAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 

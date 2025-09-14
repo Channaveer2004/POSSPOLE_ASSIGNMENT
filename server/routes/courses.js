@@ -1,7 +1,7 @@
 // routes/courses.js
 import express from "express";
 import Course from "../models/Course.js";
-import { requireAuth, requireAdmin } from "../middleware/auth.js"; // <- corrected
+import { requireAuth, requireAdmin } from "../middlewares/auth.js"; // <- corrected
 
 const router = express.Router();
 
