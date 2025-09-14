@@ -21,9 +21,11 @@ connectDB();
 
 
 app.use(helmet());
+// Normalize CLIENT_URL to remove trailing slash for CORS
+const allowedOrigin = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, "") : undefined;
 app.use(cors({
-  origin: process.env.CLIENT_URL, 
-  credentials: true,              
+  origin: allowedOrigin,
+  credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
