@@ -545,6 +545,36 @@
   padding: var(--space-4);
 }
 
+/* Login page flex for admin credentials */
+
+/* Simple admin credentials text for login */
+.login-admin-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.login-admin-plain-text {
+  margin-right: 2rem;
+  font-size: 1rem;
+  color: #444;
+  white-space: pre-line;
+  max-width: 260px;
+}
+@media (max-width: 768px) {
+  .login-admin-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .login-admin-plain-text {
+    margin: 0 0 0.5rem 0;
+    max-width: 100%;
+    font-size: 0.98rem;
+    text-align: center;
+  }
+}
+}
+
 .auth-container {
   width: 100%;
   max-width: 400px;
@@ -912,4 +942,4 @@
   .table td {
     padding: var(--space-3) var(--space-4);
   }
-}
+

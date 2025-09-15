@@ -29,7 +29,10 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page login-admin-row">
+      <div className="login-admin-plain-text">
+        Admin credentials: email: admin@example.com, password: Admin@1234
+      </div>
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-header">
