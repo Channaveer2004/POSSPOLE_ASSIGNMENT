@@ -15,6 +15,7 @@ import adminRoutes from "./routes/admin.js";
 
 dotenv.config();
 const app = express();
+app.set('trust proxy', true); 
 
 
 connectDB();
